@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Component_F from './Component_F';
+import Component_E from './Component_E';
 
 export class Conponent_C extends Component {
     render() {
@@ -7,7 +7,7 @@ export class Conponent_C extends Component {
             <div>
                 <hr/>
                 <h1>This is Component_C</h1>
-                <Component_F/>
+                <Component_E/>
                 <hr/>
             </div>
         )

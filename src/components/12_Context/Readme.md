@@ -85,5 +85,67 @@ This means the value can be consumed in Component_C and all its descendant so we
     }
 The above code will not work . With Hook - useContext its possible    
 ==========================================================================
+(2) We can set default value to context , its passed as argument to createContext.
 
-(2) There is something called contextType
+UserContext.js
+--------------
+//const userContext = React.createContext();
+const userContext = React.createContext('ABCD');
+
+
+Note : This default will only be used if it does not have a matching provider , so we will comment 
+        <UserProvider> in app.js as below:
+
+App.js
+-----
+<div className="App">
+        <h1>This is App component</h1>
+            {/* <UserProvider value="Swatantra"> */}
+              <Component_C/>
+            {/* </UserProvider> */}
+    </div>
+
+With the above 2 code changes , it will display in browser - "ABCD"
+
+(3) There is something called contextType property in class
+It can be used as an alternative to Consumer but there are some drawback which we will see later:
+we will try this in Component E using below steps :
+
+Step1: In UserContext we need to export default (earlier we were only exporting UserProvider & UserCOnsumer)
+so now we will export both UserContext as default export and UserProvider&UserConsumer as general export.
+=======================================
+import React from 'react';
+
+const UserContext = React.createContext('ABCD');
+
+const UserProvider = UserContext.Provider;
+const UserConsumer = UserContext.Consumer;
+
+export {UserProvider,UserConsumer};
+export default UserContext; //needed for contextType - see readme file
+============================================
+
+Step2: Assign the context to contextType property in class
+static context_type = UserContext;
+=================================================
+Step3: In render method the context can be used with "this.context_type"
+
+class Component_E extends Component {
+    static context_type = UserContext;
+    render() {
+        return (
+            <div>
+                <h1>This is Component_E and value fetched using contextType is : {this.context_type}</h1>
+                <Component_F/>
+            </div>
+        )
+    }
+}
+
+export default Component_E
+=================================================
+
+
+Although it looks simpler than Consumer but we should not use it because : 
+- only work with class components
+- we can only subscribe to single context using contextType
